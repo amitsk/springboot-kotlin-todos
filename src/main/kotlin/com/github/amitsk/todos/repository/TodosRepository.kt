@@ -45,9 +45,8 @@ class HashMapTodoRepository : TodosRepository {
   }
 
   override fun getTodo(id: Long): TodoItem {
-      todos.getOrElse(id, throw RuntimeException())
+    logger.info("Fetching Todo for $id")
+    return todos.getValue(id)
   }
-
-
 
 }
