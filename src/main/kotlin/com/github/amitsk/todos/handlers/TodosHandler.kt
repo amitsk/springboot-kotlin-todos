@@ -15,17 +15,35 @@ import java.net.URI
 
 @Component
 class TodosHandler(val repository: TodosRepository) {
-
-  fun getTodo(serverRequest: ServerRequest): Mono<ServerResponse> =
-      ok().json().body(TodoItem(12L, "task", "Do Something").toMono())
-
-
-  fun createTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
-    val todoItem = serverRequest.bodyToMono<TodoItem>()
-    return created(URI.create("yo!")).render("welcome")
+  companion object {
+    val idKey = "id"
   }
 
-  fun updateTodo(serverRequest: ServerRequest): Mono<ServerResponse> = ok().json().render("welcome")
-  fun deleteTodo(serverRequest: ServerRequest): Mono<ServerResponse> = noContent().build()
+  fun getTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
+
+    val todoItem = repository.getTodo(serverRequest.pathVariable(idKey).toLong())
+    return ok().json().body(todoItem.toMono())
+  }
+
+  fun createTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
+    val todoItemMono = serverRequest.bodyToMono<TodoItem>()
+    return todoItemMono.map { item ->
+      repository.createTodo(item)
+    }.flatMap { cItm -> created(URI.create(cItm.id.toString())).build() }
+  }
+
+  fun updateTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
+    val todoItemMono = serverRequest.bodyToMono<TodoItem>()
+    val id = serverRequest.pathVariable(idKey).toLong()
+
+    return todoItemMono.map { item ->
+      repository.updateTodo(id, item)
+    }.flatMap { cItm -> created(URI.create(cItm.id.toString())).build() }
+  }
+
+  fun deleteTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
+    repository.deleteTodo(serverRequest.pathVariable(idKey).toLong())
+    return noContent().build()
+  }
 
 }
