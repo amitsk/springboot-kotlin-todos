@@ -61,7 +61,7 @@ dependencies {
 //	compile('org.springframework.boot:spring-boot-starter-jdbc')
 //	compile('org.springframework.boot:spring-boot-starter-jooq')
 //	compile('org.springframework.retry:spring-retry')
-	//compile('org.springframework.boot:spring-boot-starter-validation')
+	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile('io.projectreactor.ipc:reactor-netty')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
@@ -69,6 +69,7 @@ dependencies {
 	compile("com.fasterxml.jackson.module:jackson-module-kotlin") {
 		exclude group: 'org.jetbrains.kotlin'
 	}
+	compile 'com.nike.backstopper:backstopper-core:0.11.4'
 //	runtime('com.h2database:h2')
 //	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

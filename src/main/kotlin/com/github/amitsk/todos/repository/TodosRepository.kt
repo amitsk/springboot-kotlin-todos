@@ -3,13 +3,14 @@ package com.github.amitsk.todos.repository
 import com.github.amitsk.todos.TodoItem
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 interface TodosRepository {
   fun deleteTodo(id: Long)
   fun createTodo(todoItem: TodoItem): TodoItem
-  fun getTodo(id: Long): TodoItem
+  fun getTodo(id: Long): Mono<TodoItem>
   fun updateTodo(key: Long, todoItem: TodoItem): TodoItem
 }
 
@@ -43,10 +44,10 @@ class HashMapTodoRepository : TodosRepository {
     todos.put(key, responseTodoItem)
     return responseTodoItem
   }
-
-  override fun getTodo(id: Long): TodoItem {
+//return Mono.justOrEmpty(this.people.get(id));
+  override fun getTodo(id: Long): Mono<TodoItem> {
     logger.info("Fetching Todo for $id")
-    return todos.getValue(id)
+    return  Mono.justOrEmpty(todos.get(id))
   }
 
 }

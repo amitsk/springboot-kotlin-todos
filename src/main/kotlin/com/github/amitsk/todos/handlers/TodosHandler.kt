@@ -1,8 +1,10 @@
 package com.github.amitsk.todos.handlers
 
 import com.github.amitsk.todos.TodoItem
+import com.github.amitsk.todos.TodosApiError
 import com.github.amitsk.todos.json
 import com.github.amitsk.todos.repository.TodosRepository
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -20,9 +22,11 @@ class TodosHandler(val repository: TodosRepository) {
   }
 
   fun getTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
-
-    val todoItem = repository.getTodo(serverRequest.pathVariable(idKey).toLong())
-    return ok().json().body(todoItem.toMono())
+    val todoItemMono = repository.getTodo(serverRequest.pathVariable(idKey).toLong())
+    val notFound = ServerResponse.status(HttpStatus.NOT_FOUND).body(TodosApiError.TODO_NOT_FOUND.toMono())
+    return todoItemMono.flatMap { itm ->
+      ok().json().body(itm.toMono())
+    }.switchIfEmpty(notFound)
   }
 
   fun createTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
