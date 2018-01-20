@@ -38,7 +38,7 @@ class TodosHandler(val repository: TodosRepository) {
 
     return todoItemMono.map { item ->
       repository.updateTodo(id, item)
-    }.flatMap { cItm -> created(URI.create(cItm.id.toString())).build() }
+    }.flatMap { cItm -> ok().json().body(cItm.toMono()) }
   }
 
   fun deleteTodo(serverRequest: ServerRequest): Mono<ServerResponse> {
