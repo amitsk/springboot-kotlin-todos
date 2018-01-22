@@ -1,6 +1,8 @@
 package com.github.amitsk.todos.repository
 
+import com.github.amitsk.todos.TODO_NOT_FOUND_ERROR
 import com.github.amitsk.todos.TodoItem
+import com.github.amitsk.todos.TodosException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
@@ -47,6 +49,9 @@ class HashMapTodoRepository : TodosRepository {
   }
 //return Mono.justOrEmpty(this.people.get(id));
   override fun getTodo(id: Long): Mono<TodoItem> {
+  if(! todos.containsKey(id)) {
+    throw TodosException(listOf(TODO_NOT_FOUND_ERROR))
+  }
     logger.info("Fetching Todo for $id")
     return  Mono.justOrEmpty(todos.get(id))
   }

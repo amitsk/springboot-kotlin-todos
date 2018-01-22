@@ -13,7 +13,7 @@ import reactor.core.publisher.toMono
 import java.net.URI
 
 @Component
-class TodosHandler(val repository: TodosRepository) {
+class TodosRoutesHandler(val repository: TodosRepository) {
   companion object {
     val idKey = "id"
   }
