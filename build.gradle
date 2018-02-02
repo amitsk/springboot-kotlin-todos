@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		kotlinVersion = '1.1.61'
-		springBootVersion = '2.0.0.M7'
+		springBootVersion = '2.0.0.RC1'
 	}
 	repositories {
 		mavenCentral()
@@ -53,10 +53,14 @@ repositories {
 	maven { url "http://dl.bintray.com/jetbrains/spek" }
 }
 
-dependencies {
-	compile('org.springframework.cloud:spring-cloud-starter-sleuth') {
-		exclude group: 'org.jetbrains.kotlin'
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.M5"
 	}
+}
+
+dependencies {
+
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile('io.projectreactor.ipc:reactor-netty')
@@ -65,6 +69,7 @@ dependencies {
 	compile("com.fasterxml.jackson.module:jackson-module-kotlin") {
 		exclude group: 'org.jetbrains.kotlin'
 	}
+	compile "org.springframework.cloud:spring-cloud-starter-sleuth"
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
@@ -77,9 +82,5 @@ dependencies {
 
 junitPlatformTest.finalizedBy 'junitHtmlReport'
 
-dependencyManagement {
-	imports {
-		mavenBom 'org.springframework.cloud:spring-cloud-sleuth:2.0.0.M5'
-	}
-}
+
 
