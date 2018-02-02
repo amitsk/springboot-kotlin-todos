@@ -22,7 +22,7 @@ class TodosRoutesHandler(val repository: TodosRepository) {
     val todoItemMono = repository.getTodo(serverRequest.pathVariable(idKey).toLong())
     return todoItemMono.flatMap { itm ->
       ok().json().body(itm.toMono())
-    }.switchIfEmpty(TODO_NOT_FOUND_ERROR.toServerResponse())
+    }//.switchIfEmpty(TODO_NOT_FOUND_ERROR.toServerResponse())
   }
 
   fun createTodo(serverRequest: ServerRequest): Mono<ServerResponse> {

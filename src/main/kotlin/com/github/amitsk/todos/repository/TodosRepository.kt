@@ -50,6 +50,7 @@ class HashMapTodoRepository : TodosRepository {
 //return Mono.justOrEmpty(this.people.get(id));
   override fun getTodo(id: Long): Mono<TodoItem> {
   if(! todos.containsKey(id)) {
+    logger.info("No........ Todo for $id")
     throw TodosException(listOf(TODO_NOT_FOUND_ERROR))
   }
     logger.info("Fetching Todo for $id")

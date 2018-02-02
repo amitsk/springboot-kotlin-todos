@@ -3,7 +3,8 @@ package com.github.amitsk.todos.handlers
 import com.github.amitsk.todos.TODO_NOT_FOUND_ERROR
 import com.github.amitsk.todos.TodosException
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.*
+import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.codec.HttpMessageWriter
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.HandlerStrategies
