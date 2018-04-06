@@ -1,20 +1,18 @@
 buildscript {
-	ext {
-		kotlinVersion = '1.1.61'
-		springBootVersion = '2.0.0.RC1'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-		classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
-		classpath 'com.kncept.junit5.reporter:junit-reporter:1.0.2'
-	}
+    ext {
+        kotlinVersion = '1.2.31'
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+    }
 }
 
 apply plugin: 'kotlin'
@@ -22,8 +20,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'project-report'
-apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'com.kncept.junit5.reporter'
 
 
 group = 'com.github.amitsk'
@@ -31,56 +27,62 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 compileKotlin {
-	kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "1.8"
 }
 compileTestKotlin {
-	kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "1.8"
 }
 
-junitPlatform {
-	filters {
-		engines {
-			include 'spek'
-		}
-	}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'spek'
+    }
 }
 
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
-	maven { url "http://dl.bintray.com/jetbrains/spek" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.M5"
-	}
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.M9"
+    }
 }
 
 dependencies {
 
-	compile('org.springframework.boot:spring-boot-starter-validation')
-	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('io.projectreactor.ipc:reactor-netty')
-	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
-	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-	compile("com.fasterxml.jackson.module:jackson-module-kotlin") {
-		exclude group: 'org.jetbrains.kotlin'
-	}
-	compile "org.springframework.cloud:spring-cloud-starter-sleuth"
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('io.projectreactor:reactor-test')
-	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
-	testCompile ('io.rest-assured:rest-assured:3.0.6')
-	testCompile 'org.assertj:assertj-core:3.9.0'
-	testCompile 'org.jetbrains.spek:spek-api:1.1.5'
-	testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+    compile('org.springframework.boot:spring-boot-starter-validation')
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+    compile('io.projectreactor.ipc:reactor-netty')
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin") {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('io.projectreactor:reactor-test')
+    testCompile('io.rest-assured:rest-assured:3.0.6')
+    testCompile 'org.assertj:assertj-core:3.9.0'
+
+    testCompile ('org.jetbrains.spek:spek-api:1.1.5') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testRuntime ('org.jetbrains.spek:spek-junit-platform-engine:1.1.5') {
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 
 }
-
-junitPlatformTest.finalizedBy 'junitHtmlReport'
 
 
 
