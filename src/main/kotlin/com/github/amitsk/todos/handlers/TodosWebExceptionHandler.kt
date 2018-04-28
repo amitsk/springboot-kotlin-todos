@@ -1,10 +1,11 @@
 package com.github.amitsk.todos.handlers
 
-import com.github.amitsk.todos.TODO_NOT_FOUND_ERROR
+import com.github.amitsk.todos.ApiError
+import com.github.amitsk.todos.ErrorCode
 import com.github.amitsk.todos.TodosException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
-import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.codec.HttpMessageWriter
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.HandlerStrategies
@@ -13,9 +14,11 @@ import org.springframework.web.reactive.result.view.ViewResolver
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebExceptionHandler
 import reactor.core.publisher.Mono
+import javax.validation.ValidationException
 
 @Component
-class TodosWebExceptionHandler() : WebExceptionHandler {
+class TodosWebExceptionHandler : WebExceptionHandler {
+  private val logger: Logger = LoggerFactory.getLogger("TodosWebExceptionHandler")
 
   override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> =
       handle(ex)
@@ -32,16 +35,22 @@ class TodosWebExceptionHandler() : WebExceptionHandler {
       //TODO Really Really basic. Please add different handlers and process the included information
       //TODO - TRy backstopper
       is TodosException -> {
-        createResponse(NOT_FOUND, "NOT_FOUND", "Entity not found, details: ${throwable.message}")
+        createResponse(
+          ApiError(listOf(ErrorCode.TODO_NOT_FOUND), HttpStatus.NOT_FOUND, "Entity not found, details: ${throwable.message}" )
+        )
+      }
+      is ValidationException -> {
+        createResponse(ApiError(listOf(ErrorCode.BAD_REQUEST), HttpStatus.BAD_REQUEST, "Bad Request: ${throwable.message}" ))
       }
       else -> {
-        createResponse(INTERNAL_SERVER_ERROR, "GENERIC_ERROR", "Unhandled exception")
+        logger.error("Generic Error caught ...", throwable)
+        createResponse(ApiError(listOf(ErrorCode.GENERIC_ERROR), HttpStatus.INTERNAL_SERVER_ERROR, "${throwable.message}" ))
       }
     }
   }
 
-  fun createResponse(httpStatus: HttpStatus, code: String, message: String): Mono<ServerResponse> =
-      ServerResponse.status(httpStatus).header("Error", message).syncBody(TODO_NOT_FOUND_ERROR)
+  fun createResponse(apiError: ApiError): Mono<ServerResponse> =
+      ServerResponse.status(apiError.httpStatus).syncBody(apiError)
 }
 
 private class HandlerStrategiesResponseContext(val strategies: HandlerStrategies) : ServerResponse.Context {

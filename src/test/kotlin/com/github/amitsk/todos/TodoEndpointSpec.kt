@@ -32,7 +32,7 @@ fun RequestSpecification.When(): RequestSpecification {
 }
 
 object TodoEndpointSpec : Spek({
-  describe("a calculator") {
+  describe("TODO Endpoint") {
     on("A TODO Item is created successfully") {
       val response =
           given().log().ifValidationFails()

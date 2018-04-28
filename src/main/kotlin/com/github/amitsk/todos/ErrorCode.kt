@@ -7,13 +7,13 @@ import org.springframework.web.reactive.function.server.body
 import reactor.core.publisher.toMono
 
 
-data class ApiError(val errorCodes: List<ErrorCode>, val httpStatus: HttpStatus)
-
-val TODO_NOT_FOUND_ERROR = ApiError(listOf(ErrorCode.TODO_NOT_FOUND), HttpStatus.NOT_FOUND)
+data class ApiError(val errorCodes: List<ErrorCode>, val httpStatus: HttpStatus, val message: String = "")
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 enum class ErrorCode(val errorCode: Int, val message: String) {
-  TODO_NOT_FOUND(30, "No Todo Found");
+  TODO_NOT_FOUND(30, "No Todo Found"),
+  GENERIC_ERROR(32, "Generic Error"),
+  BAD_REQUEST(31, "Bad Request");
 }
 
 fun ApiError.toServerResponse() =
