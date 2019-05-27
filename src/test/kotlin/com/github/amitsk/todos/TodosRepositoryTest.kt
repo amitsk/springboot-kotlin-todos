@@ -3,7 +3,7 @@ package com.github.amitsk.todos
 import com.github.amitsk.todos.repository.HashMapTodoRepository
 // entry point for all assertThat methods and utility methods (e.g. entry)
 import org.assertj.core.api.Assertions.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 
 class TodosRepositoryTest {

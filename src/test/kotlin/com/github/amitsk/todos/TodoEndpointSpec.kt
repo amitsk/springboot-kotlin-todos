@@ -9,10 +9,10 @@ import com.nike.todoservice.TodoEndpointSpecData.todoIdCreated
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
 import io.restassured.specification.RequestSpecification
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.on
+
 import org.assertj.core.api.Assertions.*
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 
 object TodoEndpointSpecData {
@@ -33,7 +33,7 @@ fun RequestSpecification.When(): RequestSpecification {
 
 object TodoEndpointSpec : Spek({
   describe("TODO Endpoint") {
-    on("A TODO Item is created successfully") {
+    it("A TODO Item is created successfully") {
       val response =
           given().log().ifValidationFails()
               .request().contentType("application/json")
@@ -45,7 +45,7 @@ object TodoEndpointSpec : Spek({
       todoIdCreated = response.header("Location").toLong()
     }
 
-    on("A TODO Item can be queried successfully") {
+    it("A TODO Item can be queried successfully") {
       val response = given().log().ifValidationFails()
           .request()
           .contentType("application/json")
@@ -60,7 +60,7 @@ object TodoEndpointSpec : Spek({
       assertThat(todoRecord.task).isEqualTo("My first task")
     }
 
-    on("A TODO Item can be updated") {
+    it("A TODO Item can be updated") {
       val response = given().log().ifValidationFails()
           .request().contentType("application/json")
           .When().pathParam("todoId", todoIdCreated)
@@ -72,7 +72,7 @@ object TodoEndpointSpec : Spek({
       assertThat(todoRecord.task).isEqualTo("My New task")
     }
 
-    on("A TODO Item can be deleted") {
+    it("A TODO Item can be deleted") {
       given().log().ifValidationFails()
           .request().contentType("application/json")
           .When()
