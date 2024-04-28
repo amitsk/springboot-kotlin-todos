@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.body
-import reactor.core.publisher.toMono
+import reactor.kotlin.core.publisher.toMono
 
 
 data class ApiError(val errorCodes: List<ErrorCode>, val httpStatus: HttpStatus, val message: String = "")
