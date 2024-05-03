@@ -1,7 +1,10 @@
 package com.github.amitsk.todos.handlers
 
-import com.github.amitsk.todos.*
+import com.github.amitsk.todos.TodoItem
+import com.github.amitsk.todos.json
 import com.github.amitsk.todos.repository.TodosRepository
+import jakarta.validation.ValidationException
+import jakarta.validation.Validator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -11,9 +14,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.*
 import org.springframework.web.reactive.function.server.bodyToMono
 import reactor.core.publisher.Mono
 import java.net.URI
-import jakarta.validation.ValidationException
-import jakarta.validation.Validator
-import reactor.kotlin.core.publisher.toMono
 
 @Component
 class TodosRoutesHandler(val repository: TodosRepository, val validator: Validator) {
