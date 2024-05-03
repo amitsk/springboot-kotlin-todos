@@ -50,7 +50,7 @@ class TodosWebExceptionHandler : WebExceptionHandler {
   }
 
   fun createResponse(apiError: ApiError): Mono<ServerResponse> =
-      ServerResponse.status(apiError.httpStatus).syncBody(apiError)
+      ServerResponse.status(apiError.httpStatus).bodyValue(apiError)
 }
 
 private class HandlerStrategiesResponseContext(val strategies: HandlerStrategies) : ServerResponse.Context {

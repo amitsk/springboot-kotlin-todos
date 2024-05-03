@@ -47,6 +47,10 @@ class TodosConfiguration() {
 //                authorize("/secure/**", hasAnyScope())
                 authorize("/todos/**", permitAll)
             }
+            authorizeExchange {
+                authorize("/secure/**", authenticated)
+            }
+
             oauth2ResourceServer {
                 jwt { }
             }
