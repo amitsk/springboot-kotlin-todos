@@ -14,7 +14,7 @@ import org.springframework.web.reactive.result.view.ViewResolver
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebExceptionHandler
 import reactor.core.publisher.Mono
-import javax.validation.ValidationException
+import jakarta.validation.ValidationException
 
 @Component
 class TodosWebExceptionHandler : WebExceptionHandler {

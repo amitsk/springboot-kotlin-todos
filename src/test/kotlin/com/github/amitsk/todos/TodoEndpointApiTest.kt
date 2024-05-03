@@ -1,18 +1,17 @@
-package com.nike.todoservice
+package com.github.amitsk.todos
 
 //
-import com.nike.todoservice.TodoEndpointSpecData.path
-import com.nike.todoservice.TodoEndpointSpecData.pathWithParam
-import com.nike.todoservice.TodoEndpointSpecData.postPayload
-import com.nike.todoservice.TodoEndpointSpecData.putPayload
-import com.nike.todoservice.TodoEndpointSpecData.todoIdCreated
+import com.github.amitsk.todos.TodoEndpointSpecData.path
+import com.github.amitsk.todos.TodoEndpointSpecData.pathWithParam
+import com.github.amitsk.todos.TodoEndpointSpecData.postPayload
+import com.github.amitsk.todos.TodoEndpointSpecData.putPayload
+import com.github.amitsk.todos.TodoEndpointSpecData.todoIdCreated
+import io.kotest.core.spec.style.DescribeSpec
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
 import io.restassured.specification.RequestSpecification
 
 import org.assertj.core.api.Assertions.*
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
 
 object TodoEndpointSpecData {
@@ -31,7 +30,7 @@ fun RequestSpecification.When(): RequestSpecification {
   return this.`when`()
 }
 
-object TodoEndpointSpec : Spek({
+class TodoEndpointSpec : DescribeSpec({
   describe("TODO Endpoint") {
     it("A TODO Item is created successfully") {
       val response =

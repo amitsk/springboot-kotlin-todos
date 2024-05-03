@@ -1,6 +1,6 @@
 package com.github.amitsk.todos
 
-import javax.validation.constraints.Pattern
+import jakarta.validation.constraints.Pattern
 
 data class TodoItem(val id: Long?,
                     @get: Pattern(regexp = "[a-zA-Z0-9_-]{1,25}", message = "Name cannot exceed 25 characters. UJse valid characters")
