@@ -43,13 +43,11 @@ class TodosConfiguration() {
     fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http {
             authorizeExchange {
-//                authorize("/todos/**", authenticated)
-//                authorize("/secure/**", hasAnyScope())
+                authorize("/secure/**", hasAnyScope())
+                authorize("/secure/**", authenticated)
                 authorize("/todos/**", permitAll)
             }
-            authorizeExchange {
-                authorize("/secure/**", authenticated)
-            }
+
 
             oauth2ResourceServer {
                 jwt { }

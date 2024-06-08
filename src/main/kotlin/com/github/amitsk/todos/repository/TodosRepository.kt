@@ -6,6 +6,7 @@ import com.github.amitsk.todos.TodosException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
@@ -56,7 +57,7 @@ class HashMapTodoRepository : TodosRepository {
       throw TodosException(listOf(ErrorCode.TODO_NOT_FOUND))
     }
     logger.info("Fetching Todo for $id")
-    return Mono.justOrEmpty(todos.get(id))
+    return todos[id].toMono()
   }
 
 }
